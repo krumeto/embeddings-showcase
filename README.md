@@ -113,6 +113,22 @@ size: about 7 MB
 
 The Hugging Face run uses smaller batches and incremental saving because the hosted inference endpoint can be slower or less predictable on long article batches.
 
+## Run The Streamlit App
+
+Start the multipage dashboard:
+
+```bash
+uv run streamlit run app/Home.py
+```
+
+Then open:
+
+```text
+http://localhost:8501
+```
+
+The app currently includes a welcome page and placeholder pages for vector search, clustering, topic modelling, and classification.
+
 ## Repository Structure
 
 ```text
