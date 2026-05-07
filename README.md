@@ -72,39 +72,6 @@ data/raw/newswire_5000_sample.parquet
 
 Expected size is about 5 MB.
 
-## Test The Embedding APIs
-
-Before embedding all 5,000 rows, test each provider on 6 articles.
-
-OpenAI test:
-
-```bash
-uv run python scripts/embed_openai.py \
-  --limit 6 \
-  --output data/embeddings/openai_test_embeddings.npy \
-  --batch-size 6
-```
-
-Expected shape:
-
-```text
-(6, 3072)
-```
-
-Hugging Face test:
-
-```bash
-uv run python scripts/embed_hf.py \
-  --limit 6 \
-  --output data/embeddings/hf_test_embeddings.npy \
-  --batch-size 6
-```
-
-Expected shape:
-
-```text
-(6, 384)
-```
 
 ## Generate Full Embeddings
 
@@ -145,38 +112,6 @@ size: about 7 MB
 ```
 
 The Hugging Face run uses smaller batches and incremental saving because the hosted inference endpoint can be slower or less predictable on long article batches.
-
-## Check The Local Artifacts
-
-Verify row counts, shapes, dtypes, and finite values:
-
-```bash
-uv run python - <<'PY'
-from pathlib import Path
-import numpy as np
-import pandas as pd
-
-raw = Path("data/raw/newswire_5000_sample.parquet")
-openai_path = Path("data/embeddings/openai_embeddings.npy")
-hf_path = Path("data/embeddings/hf_embeddings.npy")
-
-df = pd.read_parquet(raw)
-openai = np.load(openai_path)
-hf = np.load(hf_path)
-
-print("raw rows:", len(df))
-print("openai:", openai.shape, openai.dtype, "finite:", np.isfinite(openai).all())
-print("hf:", hf.shape, hf.dtype, "finite:", np.isfinite(hf).all())
-PY
-```
-
-Expected result:
-
-```text
-raw rows: 5000
-openai: (5000, 3072) float32 finite: True
-hf: (5000, 384) float32 finite: True
-```
 
 ## Repository Structure
 
